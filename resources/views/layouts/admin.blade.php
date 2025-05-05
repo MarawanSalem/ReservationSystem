@@ -12,144 +12,225 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
-                        }
-                    }
-                }
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles -->
+    <style>
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1055;
+            display: none;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            outline: 0;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1050;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+        }
+
+        .modal.fade .modal-dialog {
+            transition: transform .3s ease-out;
+            transform: translate(0, -50px);
+        }
+
+        .modal.show .modal-dialog {
+            transform: none;
+        }
+
+        .modal-dialog {
+            position: relative;
+            width: auto;
+            margin: 0.5rem;
+            pointer-events: none;
+        }
+
+        .modal-content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            pointer-events: auto;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid rgba(0,0,0,.2);
+            border-radius: 0.3rem;
+            outline: 0;
+        }
+
+        @media (min-width: 576px) {
+            .modal-dialog {
+                max-width: 500px;
+                margin: 1.75rem auto;
+            }
+
+            .modal-dialog-centered {
+                min-height: calc(100% - 3.5rem);
+                display: flex;
+                align-items: center;
+            }
+
+            .modal-dialog-lg {
+                max-width: 800px;
             }
         }
-    </script>
+    </style>
 </head>
-<body class="font-sans antialiased bg-gray-50">
+<body class="bg-light">
     @auth
         @if(auth()->user()->hasRole('admin'))
-            <div class="min-h-screen flex">
+            <div class="d-flex">
                 <!-- Sidebar -->
-                <div class="hidden md:flex md:w-64 md:flex-col">
-                    <div class="flex flex-col flex-grow pt-5 bg-white overflow-y-auto">
-                        <div class="flex items-center flex-shrink-0 px-4">
-                            <a href="{{ route('admin.dashboard') }}" class="text-2xl font-bold text-primary-600">Admin Panel</a>
-                        </div>
-                        <div class="mt-5 flex-grow flex flex-col">
-                            <nav class="flex-1 px-2 pb-4 space-y-1">
-                                <a href="{{ route('admin.dashboard') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.dashboard') ? 'bg-primary-50 text-primary-600' : 'text-gray-600 hover:bg-primary-50 hover:text-primary-600' }}">
-                                    <svg class="mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                                    </svg>
-                                    Dashboard
-                                </a>
-                                <a href="{{ route('admin.users.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.users.*') ? 'bg-primary-50 text-primary-600' : 'text-gray-600 hover:bg-primary-50 hover:text-primary-600' }}">
-                                    <svg class="mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                    Users
-                                </a>
-                                {{-- Commenting out unready routes
-                                <a href="{{ route('admin.services.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.services.*') ? 'bg-primary-50 text-primary-600' : 'text-gray-600 hover:bg-primary-50 hover:text-primary-600' }}">
-                                    <svg class="mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                    </svg>
-                                    Services
-                                </a>
-                                <a href="{{ route('admin.reservations.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.reservations.*') ? 'bg-primary-50 text-primary-600' : 'text-gray-600 hover:bg-primary-50 hover:text-primary-600' }}">
-                                    <svg class="mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                    Reservations
-                                </a>
-                                <a href="{{ route('admin.notifications.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.notifications.*') ? 'bg-primary-50 text-primary-600' : 'text-gray-600 hover:bg-primary-50 hover:text-primary-600' }}">
-                                    <svg class="mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                    </svg>
-                                    Notifications
-                                </a>
-                                --}}
-                            </nav>
-                        </div>
-                        <div class="flex-shrink-0 flex border-t border-gray-200 p-4">
-                            <div class="flex-shrink-0 group block">
-                                <div class="flex items-center">
-                                    <div>
-                                        <img class="inline-block h-9 w-9 rounded-full" src="{{ auth()->user()->image ?? 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}" alt="{{ auth()->user()->name }}">
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">{{ auth()->user()->name }}</p>
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                            <button type="submit" class="text-xs font-medium text-gray-500 group-hover:text-gray-700">Logout</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="d-none d-md-flex flex-column flex-shrink-0 p-3 bg-white shadow-sm" style="width: 280px; min-height: 100vh;">
+                    <a href="{{ route('admin.dashboard') }}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none">
+                        <span class="fs-4 text-primary fw-bold">Admin Panel</span>
+                    </a>
+                    <hr>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.dashboard') }}"
+                               class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : 'text-dark' }}">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.users.index') }}"
+                               class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : 'text-dark' }}">
+                                <i class="fas fa-users me-2"></i>
+                                Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.services.index') }}"
+                               class="nav-link {{ request()->routeIs('admin.services.*') ? 'active' : 'text-dark' }}">
+                                <i class="fas fa-concierge-bell me-2"></i>
+                                Services
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.reservations.index') }}"
+                               class="nav-link {{ request()->routeIs('admin.reservations.*') ? 'active' : 'text-dark' }}">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                Reservations
+                            </a>
+                        </li>
+                        {{-- Commenting out unready notifications route
+                        <li class="nav-item">
+                            <a href="{{ route('admin.notifications.index') }}"
+                               class="nav-link {{ request()->routeIs('admin.notifications.*') ? 'active' : 'text-dark' }}">
+                                <i class="fas fa-bell me-2"></i>
+                                Notifications
+                            </a>
+                        </li>
+                        --}}
+                    </ul>
+                    <hr>
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}" alt="" width="32" height="32" class="rounded-circle me-2">
+                            <strong>{{ auth()->user()->name }}</strong>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                            <li><a class="dropdown-item" href="{{ route('profile.show') }}">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">Sign out</button>
+                                </form>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
                 <!-- Main content -->
-                <div class="flex-1 flex flex-col overflow-hidden">
-                    <!-- Mobile menu button -->
-                    <div class="md:hidden">
-                        <button type="button" class="mobile-menu-button p-4 text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </button>
-                    </div>
+                <div class="flex-grow-1">
+                    <!-- Top navbar for mobile -->
+                    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm d-md-none">
+                        <div class="container-fluid">
+                            <a class="navbar-brand" href="#">Admin Panel</a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarNav">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                                           href="{{ route('admin.dashboard') }}">
+                                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}"
+                                           href="{{ route('admin.users.index') }}">
+                                            <i class="fas fa-users me-2"></i>Users
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->routeIs('admin.services.*') ? 'active' : '' }}"
+                                           href="{{ route('admin.services.index') }}">
+                                            <i class="fas fa-concierge-bell me-2"></i>Services
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->routeIs('admin.reservations.*') ? 'active' : '' }}"
+                                           href="{{ route('admin.reservations.index') }}">
+                                            <i class="fas fa-calendar-alt me-2"></i>Reservations
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
 
                     <!-- Page content -->
-                    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
-                        <div class="container mx-auto px-4 py-6">
-                            @yield('content')
-                        </div>
+                    <main class="p-4">
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if(session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @yield('content')
                     </main>
                 </div>
             </div>
-
-            <!-- Mobile menu -->
-            <div class="mobile-menu hidden md:hidden">
-                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                    <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Dashboard</a>
-                    <a href="{{ route('admin.users.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Users</a>
-                    {{-- Commenting out unready routes
-                    <a href="{{ route('admin.services.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Services</a>
-                    <a href="{{ route('admin.reservations.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Reservations</a>
-                    <a href="{{ route('admin.notifications.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Notifications</a>
-                    --}}
-                </div>
-            </div>
-
-            <script>
-                // Mobile menu toggle
-                document.querySelector('.mobile-menu-button').addEventListener('click', function() {
-                    document.querySelector('.mobile-menu').classList.toggle('hidden');
-                });
-            </script>
         @else
-            <script>
-                window.location.href = "{{ route('home') }}";
-            </script>
+            <script>window.location.href = "{{ route('home') }}";</script>
         @endif
     @else
-        <script>
-            window.location.href = "{{ route('login') }}";
-        </script>
+        <script>window.location.href = "{{ route('login') }}";</script>
     @endauth
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    @stack('scripts')
 </body>
 </html>

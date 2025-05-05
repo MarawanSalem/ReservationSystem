@@ -8,6 +8,8 @@ use App\Http\Controllers\Web\ReservationController;
 use App\Http\Controllers\Web\NotificationController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Admin\ReservationController as AdminReservationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -55,5 +57,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
         Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
         Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+
+        // Service management routes
+        Route::get('/services', [AdminServiceController::class, 'index'])->name('services.index');
+        Route::get('/services/create', [AdminServiceController::class, 'create'])->name('services.create');
+        Route::post('/services', [AdminServiceController::class, 'store'])->name('services.store');
+        Route::get('/services/{service}', [AdminServiceController::class, 'show'])->name('services.show');
+        Route::get('/services/{service}/edit', [AdminServiceController::class, 'edit'])->name('services.edit');
+        Route::put('/services/{service}', [AdminServiceController::class, 'update'])->name('services.update');
+        Route::delete('/services/{service}', [AdminServiceController::class, 'destroy'])->name('services.destroy');
+
+        // Reservation management routes
+        Route::get('/reservations', [AdminReservationController::class, 'index'])->name('reservations.index');
+        Route::get('/reservations/{reservation}', [AdminReservationController::class, 'show'])->name('reservations.show');
+        Route::patch('/reservations/{reservation}/status', [AdminReservationController::class, 'updateStatus'])->name('reservations.update-status');
+        Route::delete('/reservations/{reservation}', [AdminReservationController::class, 'destroy'])->name('reservations.destroy');
     });
 });

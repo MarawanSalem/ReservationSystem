@@ -49,10 +49,19 @@ class UserController extends Controller
             ->exists();
 
         if (!$isAdmin) {
-            return redirect()->route('home');
+            return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        return view('admin.users.show', compact('user'));
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'username' => $user->username,
+            'phone' => $user->phone,
+            'image' => $user->image,
+            'roles' => $user->roles,
+            'created_at' => $user->created_at,
+        ]);
     }
 
     public function destroy(User $user)

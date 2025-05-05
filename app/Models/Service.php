@@ -16,25 +16,31 @@ class Service extends Model
         'description',
         'service_provider',
         'location',
-        'added_by',
-        'image',
         'price',
         'duration',
         'category',
+        'image',
         'rating',
+        'added_by'
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
+        'price' => 'float',
         'duration' => 'integer',
-        'rating' => 'decimal:1',
+        'rating' => 'float',
     ];
 
+    /**
+     * Get the user who added this service.
+     */
     public function addedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'added_by');
     }
 
+    /**
+     * Get the reservations for this service.
+     */
     public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);
