@@ -3,19 +3,38 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rules;
 
 class AuthController extends Controller
 {
-    protected $userRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function showLoginForm()
     {
-        $this->userRepository = $userRepository;
+        return view('auth.login');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'login' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
+
+        $loginField = filter_var($credentials['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $credentials[$loginField] = $credentials['login'];
+        unset($credentials['login']);
+
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('home'));
+        }
+
+        return back()->withErrors([
+            'login' => 'The provided credentials do not match our records.',
+        ])->withInput($request->only('login', 'remember'));
     }
 
     public function showRegistrationForm()
@@ -25,55 +44,33 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'max:20', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'bio' => ['nullable', 'string'],
-            'image' => ['nullable', 'string']
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = $this->userRepository->create([
-            'name' => $validated['name'],
-            'username' => $validated['username'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'password' => Hash::make($validated['password']),
-            'bio' => $validated['bio'] ?? null,
-            'image' => $validated['image'] ?? null
+        $user = User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+            'bio' => '',
+            'image' => 'https://ui-avatars.com/api/?name=' . urlencode($request->name),
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('profile.show');
-    }
-
-    public function showLoginForm()
-    {
-        return view('auth.login');
-    }
-
-    public function login(Request $request)
-    {
-        $validated = $request->validate([
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
-        ]);
-
-        if (!Auth::attempt($validated)) {
-            return back()->withErrors([
-                'email' => 'The provided credentials do not match our records.',
-            ])->onlyInput('email');
-        }
-
-        return redirect()->intended(route('profile.show'));
+        return redirect(route('home'));
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
