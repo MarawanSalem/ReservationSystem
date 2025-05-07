@@ -4,6 +4,8 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -32,6 +34,21 @@ class UserRepository implements UserRepositoryInterface
     public function update($id, array $data)
     {
         $user = $this->find($id);
+
+        if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+            // Delete old image if exists
+            if ($user->image && Storage::disk('public')->exists($user->image)) {
+                Storage::disk('public')->delete($user->image);
+            }
+
+            // Store new image
+            $extension = $data['image']->getClientOriginalExtension();
+            $fileName = 'profile_' . Str::random(20) . '.' . $extension;
+            $path = $data['image']->storeAs('uploads/profiles', $fileName, 'public');
+
+            $data['image'] = $path;
+        }
+
         $user->update($data);
         return $user;
     }

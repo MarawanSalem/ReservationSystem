@@ -35,7 +35,7 @@
                             <td>{{ $user->id }}</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ $user->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
+                                    <img src="{{ $user->image ? Storage::url($user->image) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
                                          alt="{{ $user->name }}"
                                          class="rounded-circle me-2"
                                          style="width: 40px; height: 40px; object-fit: cover;">
@@ -212,7 +212,7 @@
                 fetch(`/admin/users/${userId}`)
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('userImage').src = data.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}`;
+                        document.getElementById('userImage').src = data.image ? `/storage/${data.image}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}`;
                         document.getElementById('userName').textContent = data.name;
                         document.getElementById('userEmail').textContent = data.email;
                         document.getElementById('userUsername').textContent = data.username;

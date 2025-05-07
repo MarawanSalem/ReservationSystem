@@ -85,7 +85,7 @@
             .modal-dialog-centered {
                 min-height: calc(100% - 3.5rem);
                 display: flex;
-                align-items: center;
+                align-items: center.
             }
 
             .modal-dialog-lg {
@@ -133,6 +133,13 @@
                                 Reservations
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.profile.show') }}"
+                               class="nav-link {{ request()->routeIs('admin.profile.*') ? 'active' : 'text-dark' }}">
+                                <i class="fas fa-user me-2"></i>
+                                Profile
+                            </a>
+                        </li>
                         {{-- Commenting out unready notifications route
                         <li class="nav-item">
                             <a href="{{ route('admin.notifications.index') }}"
@@ -146,11 +153,15 @@
                     <hr>
                     <div class="dropdown">
                         <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}" alt="" width="32" height="32" class="rounded-circle me-2">
+                            <img src="{{ auth()->user()->image ? Storage::url(auth()->user()->image) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}"
+                                 alt="{{ auth()->user()->name }}"
+                                 width="32"
+                                 height="32"
+                                 class="rounded-circle me-2">
                             <strong>{{ auth()->user()->name }}</strong>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                            <li><a class="dropdown-item" href="{{ route('profile.show') }}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.profile.show') }}">Profile</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
