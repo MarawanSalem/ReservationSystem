@@ -53,6 +53,22 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Get the user's avatar URL.
+     *
+     * @return string
+     */
+    public function getAvatarUrlAttribute(): string
+    {
+        if ($this->image && !str_contains($this->image, 'ui-avatars')) {
+            return asset('storage/' . $this->image);
+        }
+
+        // Generate initials-based avatar URL using ui-avatars
+        $name = urlencode($this->name);
+        return "https://ui-avatars.com/api/?name={$name}&color=D81B60&background=FCE4EC";
+    }
+
     public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);
