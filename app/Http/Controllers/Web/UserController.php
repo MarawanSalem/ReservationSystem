@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
@@ -29,15 +30,16 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $user = $request->user();
+        $user = auth()->user();
 
         $validated = $request->validate([
-            'name' => ['sometimes', 'string', 'max:255'],
-            'username' => ['sometimes', 'string', 'max:255', 'unique:users,username,' . $user->id],
-            'email' => ['sometimes', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'phone' => ['sometimes', 'string', 'max:20', 'unique:users,phone,' . $user->id],
+            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:users,username,' . $user->id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'phone' => ['required', 'string', 'max:20', 'unique:users,phone,' . $user->id],
             'bio' => ['nullable', 'string'],
-            'image' => ['nullable', 'string']
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'remove_image' => ['nullable', 'boolean']
         ]);
 
         $this->userRepository->update($user->id, $validated);
@@ -57,7 +59,7 @@ class UserController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        $user = $request->user();
+        $user = auth()->user();
 
         if (!Hash::check($validated['current_password'], $user->password)) {
             return back()->withErrors([

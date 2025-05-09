@@ -2,21 +2,21 @@
 
 namespace App\Policies;
 
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationPolicy
 {
     use HandlesAuthorization;
 
-    public function view(User $user, DatabaseNotification $notification)
+    public function view(User $user, Notification $notification)
     {
-        return $user->id === $notification->notifiable_id;
+        return $user->id === $notification->receiver_id;
     }
 
-    public function update(User $user, DatabaseNotification $notification)
+    public function update(User $user, Notification $notification)
     {
-        return $user->id === $notification->notifiable_id;
+        return $user->id === $notification->receiver_id;
     }
 }

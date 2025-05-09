@@ -35,9 +35,10 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = $this->find($id);
 
+        // Handle image upload
         if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
             // Delete old image if exists
-            if ($user->image && Storage::disk('public')->exists($user->image)) {
+            if ($user->image && !str_contains($user->image, 'ui-avatars')) {
                 Storage::disk('public')->delete($user->image);
             }
 
@@ -47,6 +48,14 @@ class UserRepository implements UserRepositoryInterface
             $path = $data['image']->storeAs('uploads/profiles', $fileName, 'public');
 
             $data['image'] = $path;
+        }
+        // Handle image removal
+        elseif (isset($data['remove_image']) && $data['remove_image']) {
+            if ($user->image && !str_contains($user->image, 'ui-avatars')) {
+                Storage::disk('public')->delete($user->image);
+            }
+            $data['image'] = null;
+            unset($data['remove_image']);
         }
 
         $user->update($data);

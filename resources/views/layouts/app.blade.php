@@ -78,7 +78,17 @@
                     <div class="flex-shrink-0 group block">
                         <div class="flex items-center">
                             <div>
-                                <img class="inline-block h-9 w-9 rounded-full" src="{{ auth()->user()->image ?? 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}" alt="{{ auth()->user()->name }}">
+                                <div class="relative h-9 w-9 rounded-full overflow-hidden bg-gray-100">
+                                    @if(auth()->user()->image && !str_contains(auth()->user()->image, 'ui-avatars'))
+                                        <img src="{{ Storage::url(auth()->user()->image) }}"
+                                             alt="{{ auth()->user()->name }}"
+                                             class="h-full w-full object-cover">
+                                    @else
+                                        <div class="h-full w-full flex items-center justify-center bg-pink-100 text-pink-600 text-sm font-bold">
+                                            {{ substr(auth()->user()->name, 0, 2) }}
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">{{ auth()->user()->name }}</p>

@@ -1,0 +1,739 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Reservation System API",
+		"description": "API collection for the Reservation System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"username\": \"johndoe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"phone\": \"+1234567890\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "login"]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/logout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/profile",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "profile"]
+						}
+					}
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "John Doe",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "johndoe",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "john@example.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "+1234567890",
+									"type": "text"
+								},
+								{
+									"key": "bio",
+									"value": "My bio",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/path/to/image.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/profile",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "profile"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Services",
+			"item": [
+				{
+					"name": "List Services",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/services?category=spa&min_price=50&max_price=200&search=massage&sort_by=price&sort_order=asc",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "services"],
+							"query": [
+								{
+									"key": "category",
+									"value": "spa"
+								},
+								{
+									"key": "min_price",
+									"value": "50"
+								},
+								{
+									"key": "max_price",
+									"value": "200"
+								},
+								{
+									"key": "search",
+									"value": "massage"
+								},
+								{
+									"key": "sort_by",
+									"value": "price"
+								},
+								{
+									"key": "sort_order",
+									"value": "asc"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Service Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/services/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "services", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Reservations",
+			"item": [
+				{
+					"name": "List Reservations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/reservations?status=pending&start_date=2024-03-01&end_date=2024-03-31&sort_by=date&sort_order=asc",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "reservations"],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending"
+								},
+								{
+									"key": "start_date",
+									"value": "2024-03-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2024-03-31"
+								},
+								{
+									"key": "sort_by",
+									"value": "date"
+								},
+								{
+									"key": "sort_order",
+									"value": "asc"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Reservation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"date\": \"2024-03-15\",\n    \"session_from\": \"10:00\",\n    \"session_to\": \"11:00\",\n    \"notes\": \"Please bring a towel\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/services/1/reservations",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "services", "1", "reservations"]
+						}
+					}
+				},
+				{
+					"name": "Cancel Reservation",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/reservations/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "reservations", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "List Notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/notifications?type=new_reservation&seen=false&sort_by=created_at&sort_order=desc",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "notifications"],
+							"query": [
+								{
+									"key": "type",
+									"value": "new_reservation"
+								},
+								{
+									"key": "seen",
+									"value": "false"
+								},
+								{
+									"key": "sort_by",
+									"value": "created_at"
+								},
+								{
+									"key": "sort_order",
+									"value": "desc"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Mark as Read",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/notifications/1/mark-as-read",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "notifications", "1", "mark-as-read"]
+						}
+					}
+				},
+				{
+					"name": "Mark All as Read",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/notifications/mark-all-as-read",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "notifications", "mark-all-as-read"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Services",
+					"item": [
+						{
+							"name": "List Services",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/admin/services?category=spa&search=massage&sort_by=price&sort_order=asc",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "admin", "services"],
+									"query": [
+										{
+											"key": "category",
+											"value": "spa"
+										},
+										{
+											"key": "search",
+											"value": "massage"
+										},
+										{
+											"key": "sort_by",
+											"value": "price"
+										},
+										{
+											"key": "sort_order",
+											"value": "asc"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Create Service",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Swedish Massage",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Relaxing full body massage",
+											"type": "text"
+										},
+										{
+											"key": "service_provider",
+											"value": "Spa Center",
+											"type": "text"
+										},
+										{
+											"key": "location",
+											"value": "123 Spa Street",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "100",
+											"type": "text"
+										},
+										{
+											"key": "duration",
+											"value": "60",
+											"type": "text"
+										},
+										{
+											"key": "category",
+											"value": "spa",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/path/to/image.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/admin/services",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "admin", "services"]
+								}
+							}
+						},
+						{
+							"name": "Update Service",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Swedish Massage",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Relaxing full body massage",
+											"type": "text"
+										},
+										{
+											"key": "service_provider",
+											"value": "Spa Center",
+											"type": "text"
+										},
+										{
+											"key": "location",
+											"value": "123 Spa Street",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "120",
+											"type": "text"
+										},
+										{
+											"key": "duration",
+											"value": "60",
+											"type": "text"
+										},
+										{
+											"key": "category",
+											"value": "spa",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/path/to/image.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/admin/services/1",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "admin", "services", "1"]
+								}
+							}
+						},
+						{
+							"name": "Delete Service",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/admin/services/1",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "admin", "services", "1"]
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "Reservations",
+					"item": [
+						{
+							"name": "List Reservations",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/admin/reservations?search=john&start_date=2024-03-01&end_date=2024-03-31&status=pending&sort_by=date&sort_order=asc",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "admin", "reservations"],
+									"query": [
+										{
+											"key": "search",
+											"value": "john"
+										},
+										{
+											"key": "start_date",
+											"value": "2024-03-01"
+										},
+										{
+											"key": "end_date",
+											"value": "2024-03-31"
+										},
+										{
+											"key": "status",
+											"value": "pending"
+										},
+										{
+											"key": "sort_by",
+											"value": "date"
+										},
+										{
+											"key": "sort_order",
+											"value": "asc"
+										}
+									]
+								}
+							}
+						},
+						{
+							"name": "Delete Reservation",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/admin/reservations/1",
+									"host": ["{{base_url}}"],
+									"path": ["api", "v1", "admin", "reservations", "1"]
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "Send Notification",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"New Service Available\",\n    \"body\": \"We have added new massage services\",\n    \"type\": \"admin_notification\",\n    \"receiver_id\": 1,\n    \"service_id\": 1,\n    \"reservation_id\": null\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/admin/notifications",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "admin", "notifications"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000"
+		},
+		{
+			"key": "token",
+			"value": "your_auth_token_here"
+		}
+	]
+}

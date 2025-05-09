@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Reservation;
+use App\Models\Notification;
 use App\Policies\ReservationPolicy;
 use App\Policies\NotificationPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -13,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
         Reservation::class => ReservationPolicy::class,
-        DatabaseNotification::class => NotificationPolicy::class,
+        Notification::class => NotificationPolicy::class,
     ];
 
     public function boot(): void
