@@ -18,37 +18,53 @@
 
     <!-- Search and Filter Section -->
     <div class="bg-white rounded-lg shadow-sm p-4">
-        <div class="flex flex-col md:flex-row gap-4">
+        <form action="{{ route('home') }}" method="GET" class="flex flex-col md:flex-row gap-4">
             <div class="flex-1">
-                <input type="text" placeholder="Search services..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
+                <input type="text"
+                       name="search"
+                       placeholder="Search services..."
+                       value="{{ request('search') }}"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
             </div>
             <div class="flex gap-2">
-                <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-                    <option>All Categories</option>
-                    <option>Beauty</option>
-                    <option>Wellness</option>
-                    <option>Fitness</option>
+                <select name="category"
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
+                    <option value="">All Categories</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category }}" {{ request('category') === $category ? 'selected' : '' }}>
+                            {{ $category }}
+                        </option>
+                    @endforeach
                 </select>
-                <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-                    <option>Sort by</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                    <option>Rating</option>
+                <select name="sort"
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
+                    <option value="rating" {{ request('sort') === 'rating' ? 'selected' : '' }}>By Rating</option>
+                    <option value="price_asc" {{ request('sort') === 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
+                    <option value="price_desc" {{ request('sort') === 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
                 </select>
+                <button type="submit"
+                        class="px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                    Search
+                </button>
             </div>
-        </div>
+        </form>
     </div>
 
     <!-- Services Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach($services as $service)
+        @forelse($services as $service)
             <x-service-card :service="$service" />
-        @endforeach
+        @empty
+            <div class="col-span-3 text-center py-12">
+                <h3 class="text-lg font-medium text-gray-900">No services found</h3>
+                <p class="mt-2 text-sm text-gray-500">Try adjusting your search or filter criteria</p>
+            </div>
+        @endforelse
     </div>
 
     <!-- Pagination -->
     <div class="mt-6">
-        {{ $services->links() }}
+        {{ $services->withQueryString()->links() }}
     </div>
 </div>
 @endsection
