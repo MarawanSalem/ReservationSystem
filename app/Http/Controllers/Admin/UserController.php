@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Notifications\AdminNotification;
 
 class UserController extends Controller
 {
@@ -84,5 +86,61 @@ class UserController extends Controller
 
         $user->delete();
         return back()->with('success', 'User deleted successfully.');
+    }
+
+    public function sendNotification(Request $request)
+    {
+        try {
+            $authUser = Auth::user();
+            $isAdmin = DB::table('model_has_roles')
+                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                ->where('model_has_roles.model_id', $authUser->id)
+                ->where('roles.name', 'admin')
+                ->exists();
+
+            if (!$isAdmin) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized access'
+                ], 403);
+            }
+
+            $request->validate([
+                'user_ids' => 'required|string',
+                'title' => 'required|string|max:255',
+                'body' => 'required|string',
+            ]);
+
+            $userIds = explode(',', $request->user_ids);
+            $users = User::whereIn('id', $userIds)->get();
+
+            if ($users->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No valid users found'
+                ], 404);
+            }
+
+            foreach ($users as $user) {
+                $user->notify(new AdminNotification(
+                    $request->title,
+                    $request->body,
+                    $authUser
+                ));
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Notifications sent successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Notification Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while sending notifications',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

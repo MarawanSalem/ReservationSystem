@@ -6,10 +6,11 @@
         <div class="col-lg-4">
             <div class="card shadow mb-4">
                 <div class="card-body text-center">
-                    <img src="{{ $user->image ? Storage::url($user->image) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
+                    <img src="{{ $user->image ? Storage::url($user->image) : '' }}"
                          alt="{{ $user->name }}"
-                         class="rounded-circle mb-3"
-                         style="width: 150px; height: 150px; object-fit: cover;">
+                         data-name="{{ $user->name }}"
+                         class="user-avatar-auto rounded-circle mb-3"
+                         style="width: 150px; height: 150px;">
                     <h4 class="mb-0">{{ $user->name }}</h4>
                     <p class="text-muted mb-3">{{ $user->email }}</p>
                     <div class="mb-3">

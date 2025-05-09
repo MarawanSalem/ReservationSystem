@@ -153,11 +153,12 @@
                     <hr>
                     <div class="dropdown">
                         <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ auth()->user()->image ? Storage::url(auth()->user()->image) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}"
+                            <img src="{{ auth()->user()->image ? Storage::url(auth()->user()->image) : '' }}"
                                  alt="{{ auth()->user()->name }}"
+                                 data-name="{{ auth()->user()->name }}"
+                                 class="user-avatar-auto rounded-circle me-2"
                                  width="32"
-                                 height="32"
-                                 class="rounded-circle me-2">
+                                 height="32">
                             <strong>{{ auth()->user()->name }}</strong>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
@@ -242,6 +243,41 @@
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Avatar System Initialization -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('img.user-avatar-auto').forEach(img => {
+                if (!img.src || img.src === window.location.href) {
+                    createUserAvatar(img, img.getAttribute('data-name'));
+                }
+
+                img.addEventListener('error', function() {
+                    createUserAvatar(this, this.getAttribute('data-name'));
+                });
+            });
+        });
+
+        function createUserAvatar(element, name) {
+            const initials = name
+                .split(' ')
+                .map(word => word[0])
+                .join('')
+                .toUpperCase();
+
+            const fontSize = Math.floor(element.clientWidth * 0.4) + 'px';
+
+            element.style.backgroundColor = '#4e73df';
+            element.style.display = 'flex';
+            element.style.alignItems = 'center';
+            element.style.justifyContent = 'center';
+            element.style.color = '#ffffff';
+            element.style.fontSize = fontSize;
+            element.style.fontWeight = 'bold';
+            element.innerHTML = initials;
+            element.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+        }
+    </script>
     @stack('scripts')
 </body>
 </html>

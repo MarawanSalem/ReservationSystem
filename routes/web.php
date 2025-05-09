@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
         Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
         Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+        Route::post('/users/notify', [AdminUserController::class, 'sendNotification'])->name('users.notify');
 
         // Service management routes
         Route::get('/services', [AdminServiceController::class, 'index'])->name('services.index');

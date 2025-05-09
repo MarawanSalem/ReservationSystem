@@ -17,10 +17,11 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-4 text-center">
-                            <img src="{{ $user->image ? Storage::url($user->image) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
+                            <img src="{{ $user->image ? Storage::url($user->image) : '' }}"
                                  alt="{{ $user->name }}"
-                                 class="rounded-circle mb-3"
-                                 style="width: 150px; height: 150px; object-fit: cover;">
+                                 data-name="{{ $user->name }}"
+                                 class="user-avatar-auto rounded-circle mb-3"
+                                 style="width: 150px; height: 150px;">
                             <div class="mb-3">
                                 <label for="image" class="form-label">Change Profile Picture</label>
                                 <input type="file" class="form-control @error('image') is-invalid @enderror"

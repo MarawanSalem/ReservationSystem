@@ -31,10 +31,11 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4 text-center">
-                            <img src="{{ $reservation->user->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($reservation->user->name) }}"
+                            <img src="{{ $reservation->user->image ? Storage::url($reservation->user->image) : '' }}"
                                  alt="{{ $reservation->user->name }}"
-                                 class="rounded-circle mb-3"
-                                 style="width: 150px; height: 150px; object-fit: cover;">
+                                 data-name="{{ $reservation->user->name }}"
+                                 class="user-avatar-auto rounded-circle mb-3"
+                                 style="width: 150px; height: 150px;">
                             <h4 class="mb-1">{{ $reservation->user->name }}</h4>
                             <p class="text-muted">{{ $reservation->user->email }}</p>
                         </div>

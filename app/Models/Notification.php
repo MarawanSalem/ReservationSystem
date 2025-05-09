@@ -13,7 +13,8 @@ class Notification extends Model
     protected $fillable = [
         'title',
         'body',
-        'route',
+        'type',
+        'data',
         'sender_id',
         'receiver_id',
         'service_id',
@@ -23,6 +24,7 @@ class Notification extends Model
 
     protected $casts = [
         'seen' => 'boolean',
+        'data' => 'array',
     ];
 
     public function sender(): BelongsTo
