@@ -62,7 +62,7 @@ Route::prefix('v1')->group(function () {
             Route::put('/profile', [AdminProfileController::class, 'update']);
 
             // Service Routes
-            Route::apiResource('services', AdminServiceController::class);
+            // Route::apiResource('services', AdminServiceController::class);
 
             // Reservation Routes
             Route::get('/reservations', [AdminReservationController::class, 'index']);

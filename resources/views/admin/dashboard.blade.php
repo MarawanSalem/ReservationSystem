@@ -10,7 +10,7 @@
     <!-- Statistics Cards -->
     <div class="row">
         <!-- Total Users Card -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -27,7 +27,7 @@
         </div>
 
         <!-- Total Services Card -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -44,7 +44,7 @@
         </div>
 
         <!-- Total Reservations Card -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -60,22 +60,6 @@
             </div>
         </div>
 
-        <!-- Today's Reservations Card -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0 me-3">
-                            <i class="fas fa-clock fa-2x text-warning opacity-75"></i>
-                        </div>
-                        <div>
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Today's Reservations</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $todayReservations }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Recent Activity -->
